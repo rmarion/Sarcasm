@@ -8,6 +8,7 @@ def change_character_casing(character):
     return character.lower()
 
 
+# This is very fast and reasonably memory efficient, but is completely random (and as a result may not look 'random' enough)
 def change_phrase_casing(phrase):
     return ''.join([change_character_casing(character) for character in phrase])
 
