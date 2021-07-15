@@ -20,7 +20,7 @@ def change_file_casing(read_path, write_path=None):
         with open(write_path, 'w') as write_file:
             for line in read_file:
                 write_file.write(change_phrase_casing(line))
-    return change_phrase_casing('Successfully changed casing for {0}, saved to {1}'.format(read_path, write_path))
+    return change_phrase_casing(f'Successfully changed casing for {read_path}, saved to {write_path}')
 
 
 def get_args(argv=None):
