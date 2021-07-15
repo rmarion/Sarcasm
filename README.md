@@ -22,6 +22,6 @@ To translate a file from a terminal:
     python3 sarcastic.py -file='The Art of War' -output='tHe aRT of WaR'
 ```
 
-To run the bot, simply run `sarcasm-bot.py` and keep it running for as long as you want the bot active.
+To run the bot, simply run `sarcasm-bot.py` and keep it running for as long as you want the bot active. You will need to set up a bot with your discord account, following the directions in discord's documentation.
 
 Congratulations, now you are also a terrible person.
