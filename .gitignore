@@ -1,2 +1,5 @@
 token
+test-token
 __pycache__
+*.tar
+requirements.txt
