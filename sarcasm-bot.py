@@ -16,16 +16,16 @@ async def sarcasm(ctx, arg: str):
 
 @client.command()
 async def sarcasm_target(ctx, user: User):
-    oldest_message = await get_oldest_message(ctx, user.id)
-    await ctx.send(change_phrase_casing(oldest_message))
-
-
-async def get_oldest_message(ctx, id):
-    messages = await ctx.channel.history(limit=200)
-    user_messages = [message for message in messages if message.author.id == id]
-    if not user_messages:
-        return "No recent message found for user."
-    return user_messages[-1]
+    try:
+        async for message in ctx.channel.history(limit=200):
+            if message.author.id == user.id:
+                await ctx.send(change_phrase_casing(message.content))
+                return
+        await ctx.send(change_phrase_casing("No recent message found for user."))
+    except commands.errors.UserNotFound:
+        await ctx.send(change_phrase_casing("User not found."))
+    except:
+        await ctx.send(change_phrase_casing("An unknown error occurred"))
 
 
 client.run(token)
