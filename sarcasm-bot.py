@@ -7,6 +7,7 @@ import_module('sarcastic')
 from sarcastic import change_phrase_casing
 
 bot_command_prefix = '!'
+auto_respond_percent_chance = 33
 
 token = open('token', 'r').readline()
 client = commands.Bot(command_prefix = bot_command_prefix)
@@ -60,7 +61,7 @@ async def sarcasm_target(ctx, user: User):
 async def on_message(message):
     if from_bot(message):
         return
-    if randint(0, 99) == 0:
+    if randint(1, auto_respond_percent_chance) == 1:
         channel = message.channel
         content = get_safe_content_or_none(message)
         if content:
