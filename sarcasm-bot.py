@@ -1,6 +1,7 @@
 from discord.ext import commands
 from discord import User
 from random import randint
+from urllib.parse import urlparse
 
 from importlib import import_module
 import_module('sarcastic')
@@ -8,6 +9,7 @@ from sarcastic import change_phrase_casing
 
 bot_command_prefix = '!'
 auto_respond_percent_chance = 33
+exclude_urls = True
 
 token = open('token', 'r').readline()
 client = commands.Bot(command_prefix = bot_command_prefix)
@@ -28,6 +30,20 @@ def get_safe_content_or_none(message):
         return message.content
     except:
         return None
+
+
+def content_is_valid(content):
+    if exclude_urls:
+        return not content_is_url(content)
+    return True
+
+
+def content_is_url(content): # Taken from https://stackoverflow.com/questions/7160737/how-to-validate-a-url-in-python-malformed-or-not
+    try: # Still not a huge fan of using exceptions to handle this, but it's the only validator that python themselves maintain at this point
+        result = urlparse(content)
+        return all([result.scheme, result.netloc])
+    except:
+        return False
 
 
 def from_bot(message):
@@ -64,7 +80,7 @@ async def on_message(message):
     if randint(1, auto_respond_percent_chance) == 1:
         channel = message.channel
         content = get_safe_content_or_none(message)
-        if content:
+        if content and content_is_valid(content):
             await channel.send(change_phrase_casing(content))
     await client.process_commands(message)
 
