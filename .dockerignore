@@ -1,2 +1,7 @@
+# build files
 build.ps1
 sarcasm.tar
+install.sh
+
+# tests
+sarcasm-tests.py
