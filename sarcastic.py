@@ -2,15 +2,33 @@ import argparse
 import random
 
 
-def change_character_casing(character):
-    if random.choice((True, False)):
-        return character.upper()
-    return character.lower()
+def coinflip():
+    return random.random() < 0.5
 
 
-# This is very fast and reasonably memory efficient, but is completely random (and as a result may not look 'random' enough)
+# A generator which returns random casing - the generator structure looks awkward, but it saves on memory, and we need to remember state
+def get_random_casing(phrase, max_same_in_a_row):
+    use_lower = coinflip()
+    current_is_lower = False
+    current_streak = 1
+    for character in phrase:
+        if use_lower:
+            yield character.lower()
+            current_is_lower = True
+        else:
+            yield character.upper()
+            current_is_lower = False
+        if current_streak < max_same_in_a_row:
+            use_lower = coinflip()
+            if use_lower == current_is_lower:
+                current_streak += 1
+        else:
+            use_lower = not use_lower 
+            current_streak = 1
+
+
 def change_phrase_casing(phrase):
-    return ''.join([change_character_casing(character) for character in phrase])
+    return ''.join(get_random_casing(phrase, 3))
 
 
 def change_file_casing(read_path, write_path=None):
