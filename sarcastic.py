@@ -8,9 +8,29 @@ def change_character_casing(character):
     return character.lower()
 
 
+# returns n random booleans, with a max of the same booleans in a row equal to max_same_in_a_row
+def random_booleans(phrase, max_same_in_a_row):
+    use_lower = random.random() < 0.5
+    current_streak = 1
+    while index < len(phrase):
+        if use_lower:
+            yield phrase[index].lower()
+        else:
+            yield phrase[index].upper()
+        if current_streak < max_same_in_a_row:
+            use_lower_next = random.random() < 0.5
+            if use_lower == use_lower_next:
+                current_streak += 1
+            use_lower = use_lower_next
+        else:
+            use_lower = not use_lower 
+            current_streak = 1
+        index += 1
+
+
 # This is very fast and reasonably memory efficient, but is completely random (and as a result may not look 'random' enough)
 def change_phrase_casing(phrase):
-    return ''.join([change_character_casing(character) for character in phrase])
+    return ''.join(random_booleans(phrase, 3))
 
 
 def change_file_casing(read_path, write_path=None):
