@@ -7,6 +7,7 @@ def coinflip():
 
 
 # A generator which returns random casing - the generator structure looks awkward, but it saves on memory, and we need to remember state
+# If we want to do anything more performant, we should make a c module instead
 def get_random_casing(phrase, max_same_in_a_row):
     use_lower = coinflip()
     current_is_lower = False

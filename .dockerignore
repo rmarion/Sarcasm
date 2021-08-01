@@ -5,3 +5,5 @@ install.sh
 
 # tests
 sarcasm-tests.py
+sarcasmscores-tests.py
+test-sarcasm-scores.csv
