@@ -4,14 +4,17 @@ from random import randint
 from urllib.parse import urlparse
 
 from importlib import import_module
+import_module('sarcasmscores')
+from sarcasmscores import get_sarcasm_words_and_scores, get_score_for_phrase
 import_module('sarcastic')
 from sarcastic import change_phrase_casing
 
 bot_command_prefix = '!'
-auto_respond_percent_chance = 33
+auto_respond_percent_chance = 3
 exclude_urls = True
 
-token = open('token', 'r').readline()
+(sarcasm_scores, sarcasm_words) = get_sarcasm_words_and_scores('sarcasm-scores.csv')
+token = open('test-token', 'r').readline()
 client = commands.Bot(command_prefix = bot_command_prefix)
 
 brief_descriptions = {
@@ -23,6 +26,7 @@ help_descriptions = {
     'sarcasm': f'{bot_command_prefix}sarcasm <phrase> - states a sarcastic version of your phrase. Multiple word phrases must be contained in quotation marks.',
     'sarcasm_target': f'{bot_command_prefix}sarcasm_target @<user> - states a sarcastic version of the last message sent by <user>.'
     }
+
 
 # Some messages have content that is a 404 error. There isn't any documentation on how to avoid this.
 def get_safe_content_or_none(message):
@@ -77,10 +81,10 @@ async def sarcasm_target(ctx, user: User):
 async def on_message(message):
     if from_bot(message):
         return
-    if randint(1, auto_respond_percent_chance) == 1:
-        channel = message.channel
-        content = get_safe_content_or_none(message)
-        if content and content_is_valid(content):
+    channel = message.channel
+    content = get_safe_content_or_none(message)
+    if content and content_is_valid:
+        if randint(1, 100) <= auto_respond_percent_chance * get_score_for_phrase(content, sarcasm_scores, sarcasm_words):
             await channel.send(change_phrase_casing(content))
     await client.process_commands(message)
 
